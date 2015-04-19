@@ -14,3 +14,6 @@ func _fixed_process(delta):
 	#print(navetta.get_pos())
 	set_pos(navetta.get_pos())
 	#print(get_parent().endPos)
+
+
+

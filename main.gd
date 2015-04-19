@@ -1,26 +1,27 @@
 
 extends Node2D
 
-# Script con la logica per la creazione degli ostacoli
+# Main script for game logic (spawning cubes etc.)
+
 var resOstacolo = null
-var ost = null
-var bordoSup = null
-var nave = null
-var counter = 0 #timer di spawn
-var distance = 0 #distanza percorsa
-var startPos = 0 #posizione navetta all'avvio
-var endPos = 0 #posizione navetta alla fine
-var spawnSpeed = 1.5 # velocità di spawn ostacoli
-var rand_height=0 # randomizza altezza di creazione blocchi
-var spawnCount = 0 #contatore degli spawn
-#Variabili di creazione blocchi
-#var delta_massa= 1.0
-#var delta_force = 50.0
+var ost = null #reference to the cube
+var bordoSup = null # reference to the upper border
+var nave = null # reference to the ship
+var counter = 0 # timer for spawns
+var distance = 0 # space traveled
+var startPos = 0 # starting position of the ship
+var endPos = 0 # final position of the ship
+var spawnSpeed = 1.5 # spawn speed
+var rand_height=0 # randomize spawn height
+var oriz_offset = 300 # cube offset from screen center
+var spawnCount = 0 # count how many cubes are spawned
+var minSpawnSpeed = 0.4 # minimum time between spawns
 
 func _ready():
-	# Precaricamento dell'ostacolo
-	bordoSup=get_child(4) 
-	nave = get_child(3)
+	
+	bordoSup = self.get_child(4) 
+	nave = self.get_child(3)
+	# Preload cube
 	resOstacolo = preload("res://ostacolo.scn")
 	set_fixed_process(true)
 	startPos = nave.get_pos().x
@@ -28,23 +29,19 @@ func _ready():
 func _fixed_process(delta):
 	counter += delta
 	distance = nave.get_pos().x - startPos
+	# Only increase endPos if the distance increased
 	if distance > endPos:
 		endPos = distance
-		if (spawnSpeed >= 0.4):
-			#delta_massa+= 0.1*delta
-			#delta_force+=0.1*delta 
-			spawnSpeed -= 0.1*delta # aumenta la difficoltà man mano che avanza
-	#print(endPos)
-	#Spawna 1 ostacolo ogni 1s
-	#TODO: Randomizzare altezza di creazione
-	if counter>=spawnSpeed:
-		ost = resOstacolo.instance() #Istanzia ostacolo
+		# Decrease time between spawns when the ship advances
+		# But no less than %minSpawnSpeed%
+		if (spawnSpeed >= minSpawnSpeed):
+			spawnSpeed -= 0.1*delta 
+	#Spawn 1 cube every %spawnSpeed%
+	if counter>spawnSpeed:
+		ost = resOstacolo.instance() # Instance cube
 		rand_height = rand_range(15.0,1200)
-		#print(rand_height)
-		ost.set_pos(Vector2(bordoSup.get_pos().x+300,bordoSup.get_pos().y+rand_height)) #Preposiziona ostacolo
-		self.add_child(ost) #Spawna ostacolo
+		ost.set_pos(Vector2(bordoSup.get_pos().x+oriz_offset,bordoSup.get_pos().y+rand_height)) # Preposition the cube
+		self.add_child(ost) # Spawn the cube
 		spawnCount +=1
-		counter = 0
-		print(spawnCount)
-	#print (spawnSpeed)
+		counter = 0 # Restart counting for the next spawn
 	

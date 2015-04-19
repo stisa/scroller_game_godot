@@ -1,17 +1,16 @@
 
 extends RigidBody2D
 
-# randomizza velocità,massa dell'ostacolo
-var delta_massa= 3.0#get_name().delta_massa
-var delta_force = 60.0#get_parent().delta_force
+# Variables to easily change mass and applied force for the cubes
+var delta_massa= 3.0
+var delta_force = 60.0
 
 
 func _ready():
-	# Random massa
-	set_mass(rand_range(delta_massa,delta_massa+15))
-	#print(get_mass())
+	# Random mass
+	self.set_mass(rand_range(delta_massa,delta_massa+15))
 	#Random force
-	set_applied_force(Vector2(rand_range(-delta_force,delta_force),rand_range(-delta_force,delta_force)))
+	self.apply_impulse(self.get_pos(),Vector2(rand_range(-delta_force,delta_force),rand_range(-delta_force,delta_force)))
 	
 func _enter_tree():
 	set_fixed_process(true)
@@ -21,6 +20,6 @@ func _fixed_process(delta):
 	if(self.get_pos().distance_to(get_node("/root/Parent/Nave").get_pos())>1300):
 		#print(self.get_pos().distance_to(get_node("/root/Parent/Nave").get_pos()))
 		#print("Destroyed"+self.get_name())
-		get_parent().spawnCount -=1
-		get_parent().remove_and_delete_child(self)
+		self.get_parent().spawnCount -=1
+		self.get_parent().remove_and_delete_child(self)
 		

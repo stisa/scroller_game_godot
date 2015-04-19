@@ -1,40 +1,43 @@
 
 extends RigidBody2D
 
-# comandi e controlli della nave
-#TODO: forse dovrei occuparmi solo di su/giù e lasciare l'avanzamento allo rotazione?
-var speed = 100.0
+# This script hold the ship's speed and controls
+
+# Ship's force. Watch out, it's applied with an impulse  
+# so it can behave differently for different inputs 
+# I think it depends on how long the input is recognized
+var speed = 100.0 
+var maxSpeed = 400.0 # Max speed the ship can go, after this I avoid applying forces
 var oriz_direction = "none"
 var vert_direction = "none"
 
 func _ready():
-	# Initialization here
 	set_fixed_process(true)
 	set_process_input(true)
 	
 func _fixed_process(delta):
-	#print(get_linear_velocity())
-	if(get_linear_velocity().y < 400.0 && get_linear_velocity().y > -400.0):
+	# Avoid the ship's exceeding %maxSpeed%
+	if(self.get_linear_velocity().y < maxSpeed && self.get_linear_velocity().y > -maxSpeed):
 		if(vert_direction=="up"):
-			apply_impulse(get_pos(),Vector2(0.0,-speed))
+			self.apply_impulse(get_pos(),Vector2(0.0,-speed))
 		elif(vert_direction=="down"):
-			apply_impulse(get_pos(),Vector2(0.0,speed))
-	if(get_linear_velocity().x < 400.0 && get_linear_velocity().x > -400.0):
+			self.apply_impulse(get_pos(),Vector2(0.0,speed))
+	if(self.get_linear_velocity().x < maxSpeed && self.get_linear_velocity().x > -maxSpeed):
 		if(oriz_direction=="left"):
-			apply_impulse(Vector2(0,0),Vector2(-speed,0.0))
+			self.apply_impulse(Vector2(0,0),Vector2(-speed,0.0))
 		elif(oriz_direction=="right"):
-			apply_impulse(Vector2(0,0),Vector2(speed,0.0))
-	#print(vert_direction +" - "+ oriz_direction)
-
+			self.apply_impulse(Vector2(0,0),Vector2(speed,0.0))
+	
 func _input(event):
 	if (event.type == InputEvent.SCREEN_TOUCH or event.type == InputEvent.MOUSE_BUTTON):
-		print("Touched"+"-"+str(event.y))
+		# Upper half of the screen is down, lower half is up
 		if(event.y < 640):
 			vert_direction = "down"
 		elif(event.y > 640):
 			vert_direction = "up"
 		else:
 			vert_direction = "none"
+		# Right half of the screen is left, left half is right	
 		if(event.x > 360):
 			oriz_direction = "left"
 		elif(event.x < 360):

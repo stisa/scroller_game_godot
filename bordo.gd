@@ -1,11 +1,11 @@
 
 extends StaticBody2D
 
-# Script per mantere il bordo allineato con la nave
+# This script keeps the border Y axis aligned with the ship's
 
 var navetta = null
-var yBordo = null
-var xNavetta = null
+var yBordo = null # y coordinate of the border
+var xNavetta = null # x coordinate of the ship
 
 func _ready():
 	navetta = get_parent().get_child(3)
@@ -14,6 +14,6 @@ func _ready():
 func _fixed_process(delta):
 	xNavetta = navetta.get_pos().x
 	yBordo = get_pos().y
-	set_pos(Vector2(xNavetta,yBordo))
+	self.set_pos(Vector2(xNavetta,yBordo)) #set the border pos
 
 
