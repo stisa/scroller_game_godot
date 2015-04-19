@@ -5,7 +5,8 @@ extends Camera2D
 var nave = null
 
 func _ready():
-	nave = self.get_parent().get_child(3) #Get a reference for the ship
+	# Get a reference for the ship
+	nave = get_node("/root/Parent/Nave") # alternative: self.get_parent().get_child(3) 
 	set_fixed_process(true)
 	
 func _fixed_process(delta):

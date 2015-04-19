@@ -19,8 +19,8 @@ var minSpawnSpeed = 0.4 # minimum time between spawns
 
 func _ready():
 	
-	bordoSup = self.get_child(4) 
-	nave = self.get_child(3)
+	bordoSup = get_node("/root/Parent/BordoSopra") # alternative: self.get_child(4) 
+	nave = get_node("/root/Parent/Nave") # alternative:  self.get_child(3)
 	# Preload cube
 	resOstacolo = preload("res://ostacolo.scn")
 	set_fixed_process(true)
