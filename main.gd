@@ -44,4 +44,15 @@ func _fixed_process(delta):
 		self.add_child(ost) # Spawn the cube
 		spawnCount +=1
 		counter = 0 # Restart counting for the next spawn
-	
+	if nave.countToDeath >=5:						# Check if the ship hasn't moved in the last 5s
+		var children = self.get_child_count()		# Get children number
+		nave.set_process_input(false)				# Stop processing control inputs
+		var i = 0
+		# Stop processing all children
+		while (i < children ):
+			self.get_child(i).set_fixed_process(false)
+			i+=1
+		var label = self.get_node("/root/Parent/GameOver/")
+		label.set_process(true) # Activate game over
+		self.set_fixed_process(false)				# Stop updating _fixed_process(), so this is the last run
+		

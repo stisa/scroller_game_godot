@@ -6,7 +6,7 @@ var nave = null
 
 func _ready():
 	# Get a reference for the ship
-	nave = get_node("/root/Parent/Nave") # alternative: self.get_parent().get_child(3) 
+	nave = get_node("/root/Parent/Nave")
 	set_fixed_process(true)
 	
 func _fixed_process(delta):

@@ -6,17 +6,25 @@ extends RigidBody2D
 # Ship's force. Watch out, it's applied with an impulse  
 # so it can behave differently for different inputs 
 # I think it depends on how long the input is recognized
-var speed = 100.0 
+var speed = 60.0 
 var maxSpeed = 400.0 # Max speed the ship can go, after this I avoid applying forces
 var oriz_direction = "none"
 var vert_direction = "none"
-
+var lastPos = 0 # last position, used to check if the ship is moving forward
+var countToDeath = 0 # counter that increases if the player dosen't move or moves backwards
 func _ready():
 	set_fixed_process(true)
 	set_process_input(true)
+	lastPos = self.get_pos()
 	
 func _fixed_process(delta):
-	# Avoid the ship's exceeding %maxSpeed%
+	if(self.get_pos()<=lastPos): # if the ship hasn't moved
+		countToDeath += delta    # increment counter
+		# What happens if countToDeath is over 5s is defined in main.gd, essentially: game over
+	else:
+		countToDeath = 0		 # reset counter
+		lastPos = self.get_pos() # update lastPos
+	# Avoid the ship's exceeding %maxSpeed% TODO: move this logic to _input
 	if(self.get_linear_velocity().y < maxSpeed && self.get_linear_velocity().y > -maxSpeed):
 		if(vert_direction=="up"):
 			self.apply_impulse(get_pos(),Vector2(0.0,-speed))
