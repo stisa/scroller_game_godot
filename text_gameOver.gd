@@ -16,5 +16,5 @@ func _process(delta):
 		# root is the parent of the nodes you want to destroy,
 		# 1 is the index of the first child to destroy,
 		# null is the next scene to load
-		get_node("/root/Singleton/").destroy_from(root,1,null)
+		get_node("/root/Singleton/").destroy_from(root,1,"res://dialog_lost.scn")
 		

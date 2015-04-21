@@ -14,5 +14,12 @@ func destroy_from(nodeParent, intChild, nextScene):
 		nodeParent.get_child(intChild).queue_free()
 		intChild +=1
 	if nextScene:
-		pass # TODO: scrivere codice per caricare la scena seguente
-	
+		add_scn(nodeParent,nextScene)
+
+func add_scn(parent,scene):
+	var scn = null
+	var s = null
+	scn = load(scene)
+	s = scn.instance()
+	s.set_pos(Vector2(-360,-640))
+	parent.add_child(s)

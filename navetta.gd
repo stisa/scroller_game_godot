@@ -8,8 +8,6 @@ extends RigidBody2D
 # I think it depends on how long the input is recognized
 var speed = 60.0 
 var maxSpeed = 400.0 # Max speed the ship can go, after this I avoid applying forces
-var oriz_direction = "none"
-var vert_direction = "none"
 var lastPos = 0 # last position, used to check if the ship is moving forward
 var countToDeath = 0 # counter that increases if the player dosen't move or moves backwards
 func _ready():
@@ -24,34 +22,21 @@ func _fixed_process(delta):
 	else:
 		countToDeath = 0		 # reset counter
 		lastPos = self.get_pos() # update lastPos
-	# Avoid the ship's exceeding %maxSpeed% TODO: move this logic to _input
-	if(self.get_linear_velocity().y < maxSpeed && self.get_linear_velocity().y > -maxSpeed):
-		if(vert_direction=="up"):
-			self.apply_impulse(get_pos(),Vector2(0.0,-speed))
-		elif(vert_direction=="down"):
-			self.apply_impulse(get_pos(),Vector2(0.0,speed))
-	if(self.get_linear_velocity().x < maxSpeed && self.get_linear_velocity().x > -maxSpeed):
-		if(oriz_direction=="left"):
-			self.apply_impulse(Vector2(0,0),Vector2(-speed,0.0))
-		elif(oriz_direction=="right"):
-			self.apply_impulse(Vector2(0,0),Vector2(speed,0.0))
 	
 func _input(event):
+
 	if (event.type == InputEvent.SCREEN_TOUCH or event.type == InputEvent.MOUSE_BUTTON):
-		# Upper half of the screen is down, lower half is up
-		if(event.y < 640):
-			vert_direction = "down"
-		elif(event.y > 640):
-			vert_direction = "up"
-		else:
-			vert_direction = "none"
-		# Right half of the screen is left, left half is right	
-		if(event.x > 360):
-			oriz_direction = "left"
-		elif(event.x < 360):
-			oriz_direction = "right"
-		else:
-			oriz_direction = "none"
-	else:
-		oriz_direction = "none"
-		vert_direction = "none"
+		# Avoid the ship's exceeding %maxSpeed%
+		if(self.get_linear_velocity().y < maxSpeed && self.get_linear_velocity().y > -maxSpeed):
+			if(event.y < self.get_pos().y):
+				self.apply_impulse(get_pos(),Vector2(0.0,speed))
+			elif(event.y > self.get_pos().y):
+				self.apply_impulse(get_pos(),Vector2(0.0,-speed))
+				
+		if(self.get_linear_velocity().x < maxSpeed && self.get_linear_velocity().x > -maxSpeed):
+			# Right half of the screen is left, left half is right	
+			if(event.x > 360):
+				self.apply_impulse(Vector2(0,0),Vector2(-speed,0.0))
+			elif(event.x < 360):
+				self.apply_impulse(Vector2(0,0),Vector2(speed,0.0))
+	
