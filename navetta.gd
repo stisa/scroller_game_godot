@@ -28,10 +28,15 @@ func _input(event):
 	if (event.type == InputEvent.SCREEN_TOUCH or event.type == InputEvent.MOUSE_BUTTON):
 		# Avoid the ship's exceeding %maxSpeed%
 		if(self.get_linear_velocity().y < maxSpeed && self.get_linear_velocity().y > -maxSpeed):
-			if(event.y < self.get_pos().y):
-				self.apply_impulse(get_pos(),Vector2(0.0,speed))
-			elif(event.y > self.get_pos().y):
+			if(event.y < 1000 && event.y > 300):	
+				if(event.y < self.get_pos().y):
+					self.apply_impulse(get_pos(),Vector2(0.0,speed))
+				elif(event.y > self.get_pos().y):
+					self.apply_impulse(get_pos(),Vector2(0.0,-speed))
+			elif(event.y>1000):
 				self.apply_impulse(get_pos(),Vector2(0.0,-speed))
+			elif(event.y <300):
+				self.apply_impulse(get_pos(),Vector2(0.0,speed))
 				
 		if(self.get_linear_velocity().x < maxSpeed && self.get_linear_velocity().x > -maxSpeed):
 			# Right half of the screen is left, left half is right	

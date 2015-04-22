@@ -17,7 +17,7 @@ func _enter_tree():
 	
 func _fixed_process(delta):
 	#Destroy the cube if it's further than 1300 from the ship
-	if(self.get_pos().distance_to(get_node("/root/Parent/Nave").get_pos())>1300):
+	if(self.get_pos().distance_to(get_node("/root/Parent/PlayScn/Nave").get_pos())>1300):
 		#print(self.get_pos().distance_to(get_node("/root/Parent/Nave").get_pos()))
 		#print("Destroyed"+self.get_name())
 		self.get_parent().spawnCount -=1

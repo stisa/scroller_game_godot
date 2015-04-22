@@ -21,5 +21,5 @@ func add_scn(parent,scene):
 	var s = null
 	scn = load(scene)
 	s = scn.instance()
-	s.set_pos(Vector2(-360,-640))
+	#s.set_pos(Vector2(0,0))
 	parent.add_child(s)

@@ -8,7 +8,7 @@ var yBordo = null								# y coordinate of the border
 var xNavetta = null								# x coordinate of the ship
 
 func _ready():
-	navetta = get_node("/root/Parent/Nave") 
+	navetta = get_node("/root/Parent/PlayScn/Nave") 
 	set_fixed_process(true)
 
 func _fixed_process(delta):
