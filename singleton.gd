@@ -23,3 +23,23 @@ func add_scn(parent,scene):
 	s = scn.instance()
 	#s.set_pos(Vector2(0,0))
 	parent.add_child(s)
+	
+var hScore = 0
+var player = null
+var highStr = null #Arrey with saved highscores
+var highScoreFile = "user://higscore.txt"
+
+func save_highscore(name, score):
+	var f = File.new()
+	f.open(highScoreFile,File.WRITE)
+	f.store_line(name+","+str(score)) # store a line	
+	f.close()
+	
+func read_highscore():
+	var f = File.new()
+	f.open(highScoreFile,File.READ)
+	highStr = f.get_line()
+	highStr = highStr.split(",",true)
+	# TODO: bring this into a variable to be opened in highscore.scn
+	# PS: WTF does a function return in gdscript????
+	f.close()
